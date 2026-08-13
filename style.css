@@ -1,125 +1,596 @@
 :root {
     --bg: #f0f4f8;
-    --bg-gradient-end: #e2e8f0;
-    --surface: rgba(255, 255, 255, 0.85);
+    --surface: #ffffff;
     --text: #1e293b;
-    --text-secondary: #475569;
+    --text-secondary: #64748b;
     --primary: #2563eb;
     --primary-dark: #1d4ed8;
-    --border: rgba(255, 255, 255, 0.5);
-    --shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    --border: #e2e8f0;
+    --shadow: 0 10px 30px rgba(0,0,0,0.08);
     --card-bg: #ffffff;
-    --card-back: #eff6ff;
-    --stat-bg: #e2e8f0;
-    --stat-item: #ffffff;
-    --btn-bg: #ffffff;
-    --btn-border: #cbd5e1;
-    --btn-hover: #f1f5f9;
-    --input-bg: #fff;
-    --input-border: #cbd5e1;
-    --mode-toggle-bg: #e2e8f0;
-    --mode-active: #2563eb;
+    --stat-bg: #f8fafc;
     --green-bg: #dcfce7;
     --green-text: #166534;
     --red-bg: #fee2e2;
     --red-text: #991b1b;
     --yellow-bg: #fef3c7;
     --yellow-text: #92400e;
-    --radius: 28px;
+    --nav-bg: #ffffff;
+    --nav-active: #2563eb;
+    --radius: 20px;
     --transition: 0.3s ease;
 }
 
 body.dark {
     --bg: #0f172a;
-    --bg-gradient-end: #1e293b;
-    --surface: rgba(30, 41, 59, 0.9);
+    --surface: #1e293b;
     --text: #f1f5f9;
     --text-secondary: #94a3b8;
     --primary: #3b82f6;
     --primary-dark: #2563eb;
-    --border: rgba(148, 163, 184, 0.2);
+    --border: #334155;
+    --shadow: 0 10px 30px rgba(0,0,0,0.4);
     --card-bg: #1e293b;
-    --card-back: #334155;
-    --stat-bg: #1e293b;
-    --stat-item: #334155;
-    --btn-bg: #334155;
-    --btn-border: #475569;
-    --btn-hover: #475569;
-    --input-bg: #1e293b;
-    --input-border: #475569;
-    --mode-toggle-bg: #1e293b;
+    --stat-bg: #334155;
     --green-bg: #14532d;
     --green-text: #bbf7d0;
     --red-bg: #7f1d1d;
     --red-text: #fecaca;
     --yellow-bg: #78350f;
     --yellow-text: #fde68a;
+    --nav-bg: #1e293b;
+    --nav-active: #3b82f6;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, var(--bg) 0%, var(--bg-gradient-end) 100%);
+    background: var(--bg);
     min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+    padding-bottom: 80px;
     transition: background var(--transition);
-    position: relative;
+    color: var(--text);
+    -webkit-tap-highlight-color: transparent;
 }
 
-/* أزرار عائمة */
-.floating-btn {
-    position: fixed;
-    bottom: 25px;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    border: none;
-    font-size: 1.4rem;
+/* ===== الصفحات ===== */
+.page {
+    display: none;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px 16px;
+    animation: fadeIn 0.3s ease;
+}
+.page.active { display: block; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.header h1, .header h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* ===== بطاقات عامة ===== */
+.card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    margin-bottom: 15px;
+}
+
+/* ===== منطقة الرفع ===== */
+.upload-card {
+    padding: 0;
+    overflow: hidden;
+}
+.upload-area {
+    padding: 30px 20px;
+    text-align: center;
     cursor: pointer;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-    z-index: 100;
+    border: 3px dashed var(--border);
+    border-radius: var(--radius);
+    transition: all var(--transition);
+    position: relative;
+}
+.upload-area:hover {
+    border-color: var(--primary);
+    background: rgba(37, 99, 235, 0.05);
+}
+.upload-area input[type="file"] {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    opacity: 0; cursor: pointer;
+}
+.upload-icon { font-size: 2.5rem; margin-bottom: 8px; }
+.upload-text { font-weight: 600; font-size: 1.1rem; }
+.upload-hint { color: var(--text-secondary); font-size: 0.85rem; margin-top: 4px; }
+
+/* ===== الإحصائيات ===== */
+.stats-card {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 15px;
+}
+.stat-item {
+    background: var(--stat-bg);
+    border-radius: 15px;
+    padding: 12px 8px;
+    text-align: center;
+}
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+.stat-label {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+.stat-item.learned .stat-value { color: var(--green-text); }
+.stat-item.difficult .stat-value { color: var(--red-text); }
+.stat-item.remaining .stat-value { color: var(--yellow-text); }
+
+/* ===== شريط الإتقان ===== */
+.mastery-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--stat-bg);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+.mastery-fill {
+    height: 100%;
+    background: var(--primary);
+    border-radius: 10px;
+    transition: width 0.5s ease;
+    width: 0%;
+}
+.mastery-text {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 15px;
+}
+
+/* ===== أزرار الوصول السريع ===== */
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 15px;
+}
+.quick-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    padding: 15px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    color: var(--text);
+    font-weight: 600;
+    box-shadow: var(--shadow);
+}
+.quick-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+.quick-icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* ===== البطاقة التعليمية ===== */
+.card-wrapper {
+    perspective: 1200px;
+    display: flex;
+    justify-content: center;
+    margin: 15px 0;
+}
+.flashcard {
+    width: 100%;
+    max-width: 400px;
+    height: 220px;
+    background: var(--card-bg);
+    border-radius: 25px;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    transform-style: preserve-3d;
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.2s, background 0.3s;
+    padding: 25px;
 }
-.floating-btn:hover {
-    transform: scale(1.1);
+.flashcard.flipped {
+    transform: rotateY(180deg);
 }
-.dark-btn {
-    right: 25px;
-    background: #334155;
+.card-face, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 25px;
+    font-size: 1.8rem;
+    font-weight: 700;
+    padding: 20px;
+    word-break: break-word;
+    text-align: center;
+}
+.card-face { background: var(--card-bg); color: var(--text); }
+.card-back {
+    background: #eff6ff;
+    transform: rotateY(180deg);
+    color: var(--text);
+}
+body.dark .card-back { background: #334155; }
+
+.word-status {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--stat-bg);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    z-index: 10;
+}
+.pronounce-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: var(--stat-bg);
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.2s;
+}
+.pronounce-btn:hover { background: var(--border); }
+
+/* ===== مجموعات الأزرار ===== */
+.control-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 15px 0;
+}
+.ctrl-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 12px 18px;
+    border-radius: 50px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    -webkit-tap-highlight-color: transparent;
+    min-width: 80px;
+}
+.ctrl-btn:hover {
+    background: var(--stat-bg);
+    transform: translateY(-2px);
+}
+.ctrl-btn.primary {
+    background: var(--primary);
     color: white;
+    border-color: var(--primary);
 }
-.about-btn {
-    right: 85px;
+.ctrl-btn.primary:hover {
+    background: var(--primary-dark);
+}
+
+/* ===== منطقة الاختبار ===== */
+.mode-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 15px 0;
+}
+.mode-toggle button {
+    border: none;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-weight: 600;
+    background: var(--stat-bg);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.mode-toggle button.active {
     background: var(--primary);
     color: white;
 }
-.list-btn {
-    right: 145px;
-    background: #10b981;
-    color: white;
+
+#guessInput {
+    width: 100%;
+    padding: 14px 20px;
+    border-radius: 50px;
+    border: 2px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text);
+    font-size: 1rem;
+    text-align: center;
+    outline: none;
+    margin: 10px 0;
+    transition: border 0.2s;
 }
-body.dark .dark-btn {
-    background: #fbbf24;
-    color: #1e293b;
+#guessInput:focus { border-color: var(--primary); }
+#guessInput.correct { border-color: #22c55e !important; background: #f0fdf4; }
+#guessInput.wrong { border-color: #ef4444 !important; background: #fef2f2; }
+
+.options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 10px 0;
+}
+.option-btn {
+    background: var(--card-bg);
+    border: 2px solid var(--border);
+    border-radius: 15px;
+    padding: 14px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+}
+.option-btn:hover { background: var(--stat-bg); }
+.option-btn.correct-choice { background: var(--green-bg); border-color: #22c55e; }
+.option-btn.wrong-choice { background: var(--red-bg); border-color: #ef4444; }
+
+.test-feedback {
+    font-weight: 600;
+    text-align: center;
+    min-height: 24px;
+    margin: 10px 0;
+}
+.test-feedback.correct { color: #22c55e; }
+.test-feedback.wrong { color: #ef4444; }
+
+/* ===== قائمة الكلمات ===== */
+.add-word-form {
+    display: flex;
+    gap: 8px;
+    margin: 15px 0;
+    flex-wrap: wrap;
+}
+.add-word-form input {
+    flex: 1;
+    padding: 10px 15px;
+    border-radius: 50px;
+    border: 2px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text);
+    font-size: 0.9rem;
+    outline: none;
+    min-width: 120px;
+    transition: border 0.2s;
+}
+.add-word-form input:focus { border-color: var(--primary); }
+
+/* ===== البحث ===== */
+.search-box {
+    margin: 10px 0;
+}
+.search-box input {
+    width: 100%;
+    padding: 10px 15px;
+    border-radius: 30px;
+    border: 2px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text);
+    font-size: 0.9rem;
+    outline: none;
+}
+.search-box input:focus {
+    border-color: var(--primary);
 }
 
-/* المودال */
+.word-list {
+    margin: 15px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 50vh;
+    overflow-y: auto;
+}
+.word-item {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    padding: 12px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+.word-pair {
+    flex: 1;
+    font-size: 0.95rem;
+}
+.word-pair strong { font-size: 1.05rem; }
+.word-actions {
+    display: flex;
+    gap: 6px;
+}
+.status-btn,
+.delete-btn {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    border: none;
+    font-weight: 600;
+    transition: filter 0.2s;
+}
+.status-btn.learned { background: var(--green-bg); color: var(--green-text); }
+.status-btn.difficult { background: var(--red-bg); color: var(--red-text); }
+.status-btn.new { background: var(--yellow-bg); color: var(--yellow-text); }
+.status-btn:hover { filter: brightness(0.9); }
+.delete-btn {
+    background: #fee2e2;
+    color: #991b1b;
+}
+.delete-btn:hover { filter: brightness(0.9); }
+
+/* ===== الإعدادات ===== */
+.settings-group {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: var(--shadow);
+}
+.settings-label {
+    font-weight: 700;
+    display: block;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+}
+.direction-toggle {
+    display: flex;
+    gap: 8px;
+}
+.direction-toggle button {
+    border: none;
+    padding: 12px 20px;
+    border-radius: 50px;
+    font-weight: 600;
+    background: var(--stat-bg);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.direction-toggle button.active {
+    background: var(--primary);
+    color: white;
+}
+.about-mini {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.avatar-small {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid var(--primary);
+}
+.about-mini p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin: 2px 0;
+}
+.project-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 5px;
+}
+.project-links a {
+    font-size: 0.8rem;
+    color: var(--primary);
+    text-decoration: none;
+    background: var(--stat-bg);
+    padding: 4px 12px;
+    border-radius: 20px;
+    transition: background 0.2s;
+}
+.project-links a:hover {
+    background: var(--border);
+}
+
+/* ===== شريط التنقل السفلي ===== */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--nav-bg);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0;
+    z-index: 100;
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+    backdrop-filter: blur(10px);
+}
+.nav-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    color: var(--text-secondary);
+    font-size: 0.7rem;
+    padding: 5px 10px;
+    border-radius: 10px;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+}
+.nav-btn .nav-icon {
+    font-size: 1.5rem;
+}
+.nav-btn.active {
+    color: var(--nav-active);
+    font-weight: 700;
+}
+.nav-btn:hover {
+    background: var(--stat-bg);
+}
+
+.version-badge {
+    position: fixed;
+    bottom: 70px;
+    left: 10px;
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    opacity: 0.7;
+    z-index: 99;
+}
+
+/* ===== نافذة منبثقة ===== */
 .modal {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0,0,0,0.7);
     backdrop-filter: blur(5px);
     z-index: 200;
     align-items: center;
@@ -128,16 +599,13 @@ body.dark .dark-btn {
 }
 .modal-content {
     background: var(--card-bg);
-    border-radius: 32px;
-    padding: 30px;
+    border-radius: 25px;
+    padding: 25px;
     max-width: 400px;
     width: 100%;
-    text-align: center;
+    text-align: right;
     position: relative;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-}
-.list-modal-content {
-    max-width: 600px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.3);
     max-height: 80vh;
     overflow-y: auto;
 }
@@ -148,505 +616,29 @@ body.dark .dark-btn {
     font-size: 2rem;
     cursor: pointer;
     color: var(--text-secondary);
-}
-.avatar {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    margin-bottom: 15px;
-    object-fit: cover;
-    border: 3px solid var(--primary);
-}
-.about-body p {
-    margin: 8px 0;
-    color: var(--text);
-}
-.links {
-    margin-top: 15px;
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-.social-link {
-    background: var(--primary);
-    color: white;
-    padding: 8px 20px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: background 0.2s;
-}
-.social-link:hover {
-    background: var(--primary-dark);
-}
-
-/* الحاوية */
-.container {
-    max-width: 800px;
-    width: 100%;
-    background: var(--surface);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 48px;
-    padding: 30px 25px;
-    box-shadow: var(--shadow), 0 0 0 1px var(--border);
-    transition: all var(--transition);
-}
-h1 {
-    text-align: center;
-    font-size: clamp(1.8rem, 5vw, 2.5rem);
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 6px;
-}
-.subtitle {
-    text-align: center;
-    color: var(--text-secondary);
-    margin-bottom: 25px;
-    padding-bottom: 15px;
-    border-bottom: 2px dashed var(--btn-border);
-}
-
-/* رفع الملف */
-.upload-area {
-    background: var(--card-bg);
-    border: 3px dashed var(--input-border);
-    border-radius: var(--radius);
-    padding: 25px 20px;
-    text-align: center;
-    cursor: pointer;
-    margin-bottom: 20px;
-    transition: all var(--transition);
-    position: relative;
-    overflow: hidden;
-}
-.upload-area:hover {
-    border-color: var(--primary);
-    background: var(--btn-hover);
-}
-.upload-area input[type="file"] {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
-}
-.upload-icon {
-    font-size: 3rem;
-    margin-bottom: 8px;
-}
-.upload-text {
-    font-weight: 600;
-    color: var(--text);
-    font-size: 1.1rem;
-}
-.upload-hint {
-    color: var(--text-secondary);
-    margin-top: 4px;
-}
-
-/* اتجاه الحفظ */
-.direction-toggle {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    background: var(--mode-toggle-bg);
-    border-radius: 60px;
-    padding: 5px;
-    width: fit-content;
-    margin: 0 auto 15px;
-    flex-wrap: wrap;
-}
-.direction-toggle span {
-    font-weight: 600;
-    color: var(--text-secondary);
-    margin: 0 5px;
-}
-.direction-toggle button {
+    background: none;
     border: none;
-    padding: 8px 18px;
-    border-radius: 60px;
-    font-weight: 600;
-    background: transparent;
-    color: var(--text);
-    cursor: pointer;
-    transition: var(--transition);
 }
-.direction-toggle button.active {
-    background: var(--mode-active);
-    color: white;
+.help-body p, .update-body p, .update-body li {
+    margin: 10px 0;
+    line-height: 1.6;
+    color: var(--text);
+}
+.help-body strong, .update-body strong {
+    color: var(--primary);
+}
+.update-body ul {
+    padding-right: 20px;
 }
 
-/* الإحصائيات */
-.stats {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 10px;
-    background: var(--stat-bg);
-    padding: 12px 18px;
-    border-radius: 60px;
-    margin-bottom: 20px;
-}
-.stats span {
-    background: var(--stat-item);
-    padding: 6px 14px;
-    border-radius: 30px;
-    font-weight: 500;
-    color: var(--text);
-    font-size: 0.9rem;
-}
-.stats .learned {
-    background: var(--green-bg);
-    color: var(--green-text);
-}
-.stats .difficult {
-    background: var(--red-bg);
-    color: var(--red-text);
-}
-.stats .remaining {
-    background: var(--yellow-bg);
-    color: var(--yellow-text);
-}
-.stats .mastery {
-    background: var(--primary);
-    color: white;
-}
-
-/* تبديل الأوضاع */
-.mode-toggle,
-.test-type-toggle {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    background: var(--mode-toggle-bg);
-    border-radius: 60px;
-    padding: 5px;
-    width: fit-content;
-    margin: 0 auto 20px;
-}
-.mode-toggle button,
-.test-type-toggle button {
-    border: none;
-    padding: 10px 22px;
-    border-radius: 60px;
-    font-weight: 600;
-    background: transparent;
-    color: var(--text);
-    cursor: pointer;
-    transition: var(--transition);
-}
-.mode-toggle button.active,
-.test-type-toggle button.active {
-    background: var(--mode-active);
-    color: white;
-}
-
-/* البطاقة */
-.card-wrapper {
-    perspective: 1200px;
-    margin: 10px 0 25px;
-    min-height: 280px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 15px;
-}
-.flashcard {
-    width: 100%;
-    max-width: 480px;
-    height: 280px;
-    background: var(--card-bg);
-    border-radius: 32px;
-    box-shadow: var(--shadow);
-    cursor: pointer;
-    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), box-shadow var(--transition);
-    transform-style: preserve-3d;
-    border: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 25px;
-    text-align: center;
-    position: relative;
-}
-.flashcard.flipped {
-    transform: rotateY(180deg);
-}
-.card-face,
-.card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 32px;
-    font-size: clamp(1.5rem, 4vw, 2.2rem);
-    font-weight: 700;
-    color: var(--text);
-    padding: 20px;
-    word-break: break-word;
-}
-.card-face {
-    background: var(--card-bg);
-}
-.card-back {
-    background: var(--card-back);
-    transform: rotateY(180deg);
-    color: var(--text);
-}
-.word-status {
-    position: absolute;
-    bottom: 15px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--btn-bg);
-    padding: 4px 18px;
-    border-radius: 30px;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    font-weight: 500;
-}
-
-/* زر النطق */
-.pronounce-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: var(--btn-bg);
-    border: none;
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: background 0.2s;
-    z-index: 5;
-}
-.pronounce-btn:hover {
-    background: var(--btn-hover);
-}
-
-/* منطقة الاختبار */
-.test-area {
-    width: 100%;
-    max-width: 450px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-.test-area input[type="text"] {
-    width: 100%;
-    padding: 14px 20px;
-    border-radius: 40px;
-    border: 2px solid var(--input-border);
-    background: var(--input-bg);
-    color: var(--text);
-    font-size: 1rem;
-    text-align: center;
-    outline: none;
-    transition: border 0.2s;
-}
-.test-area input.correct {
-    border-color: #22c55e !important;
-    background: #f0fdf4;
-}
-.test-area input.wrong {
-    border-color: #ef4444 !important;
-    background: #fef2f2;
-}
-.options-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    width: 100%;
-}
-.option-btn {
-    background: var(--btn-bg);
-    border: 2px solid var(--btn-border);
-    border-radius: 20px;
-    padding: 14px;
-    font-weight: 600;
-    color: var(--text);
-    cursor: pointer;
-    transition: all 0.2s;
-    text-align: center;
-}
-.option-btn:hover {
-    background: var(--btn-hover);
-}
-.option-btn.correct-choice {
-    background: var(--green-bg);
-    border-color: #22c55e;
-    color: var(--green-text);
-}
-.option-btn.wrong-choice {
-    background: var(--red-bg);
-    border-color: #ef4444;
-    color: var(--red-text);
-}
-.test-feedback {
-    font-weight: 600;
-    text-align: center;
-    min-height: 24px;
-}
-.test-feedback.correct {
-    color: #22c55e;
-}
-.test-feedback.wrong {
-    color: #ef4444;
-}
-.test-buttons {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-/* الأزرار العامة */
-.controls,
-.footer-actions {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-    margin: 15px 0 10px;
-}
-.controls button,
-.footer-actions button,
-.test-buttons button {
-    background: var(--btn-bg);
-    border: 1px solid var(--btn-border);
-    padding: 12px 24px;
-    border-radius: 60px;
-    font-weight: 600;
-    color: var(--text);
-    cursor: pointer;
-    transition: all 0.2s;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 0.95rem;
-}
-.controls button:hover,
-.footer-actions button:hover,
-.test-buttons button:hover {
-    background: var(--btn-hover);
-    transform: translateY(-2px);
-}
-.controls button.primary,
-.test-buttons button.primary {
-    background: var(--primary);
-    color: white;
-    border-color: var(--primary);
-}
-.controls button.primary:hover {
-    background: var(--primary-dark);
-}
-.controls button.warning {
-    background: #f59e0b;
-    color: white;
-    border-color: #f59e0b;
-}
-.controls button.warning:hover {
-    background: #d97706;
-}
-.controls button.hint {
-    background: #8b5cf6;
-    color: white;
-    border-color: #8b5cf6;
-}
-.controls button.hint:hover {
-    background: #7c3aed;
-}
-
-/* قائمة الكلمات */
-.word-list {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-.word-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 15px;
-    border-radius: 15px;
-    background: var(--stat-bg);
-    color: var(--text);
-    gap: 10px;
-}
-.word-item .word-pair {
-    flex: 1;
-    text-align: right;
-}
-.word-item .word-actions {
-    display: flex;
-    gap: 6px;
-}
-.word-item .status-btn {
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    border: none;
-    background: var(--btn-bg);
-    color: var(--text);
-    transition: background 0.2s;
-}
-.word-item .status-btn.learned {
-    background: var(--green-bg);
-    color: var(--green-text);
-}
-.word-item .status-btn.difficult {
-    background: var(--red-bg);
-    color: var(--red-text);
-}
-.word-item .status-btn.new {
-    background: var(--yellow-bg);
-    color: var(--yellow-text);
-}
-.word-item .status-btn:hover {
-    filter: brightness(0.9);
-}
-
-/* تجاوب الموبايل */
-@media (max-width: 600px) {
-    .container {
-        padding: 20px 15px;
-    }
-    .flashcard {
-        height: 220px;
-    }
-    .card-face,
-    .card-back {
-        font-size: 1.6rem;
-    }
-    .controls button,
-    .footer-actions button {
-        padding: 10px 16px;
-        font-size: 0.85rem;
-        min-width: auto;
-    }
-    .mode-toggle button,
-    .test-type-toggle button,
-    .direction-toggle button {
-        padding: 8px 14px;
-        font-size: 0.8rem;
-    }
-    .options-grid {
-        grid-template-columns: 1fr;
-    }
+/* ===== تجاوب الموبايل ===== */
+@media (max-width: 400px) {
+    .stats-card { grid-template-columns: repeat(2, 1fr); }
+    .quick-actions { grid-template-columns: 1fr 1fr 1fr; }
+    .card-face, .card-back { font-size: 1.4rem; }
+    .flashcard { height: 180px; }
+    .options-grid { grid-template-columns: 1fr; }
+    .ctrl-btn { padding: 10px 14px; font-size: 0.8rem; min-width: 70px; }
+    .mode-toggle button { padding: 10px 20px; }
+    .add-word-form input { min-width: 100px; }
 }
