@@ -1,128 +1,268 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📚 بطاقات الكلمات – حفظ ذكي</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📚 بطاقات الكلمات – حفظ ذكي v1.2</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- أزرار عائمة -->
-<button id="darkToggle" class="floating-btn dark-btn" title="الوضع الداكن">🌙</button>
-<button id="aboutBtn" class="floating-btn about-btn" title="عن المبرمج">👤</button>
-<button id="listBtn" class="floating-btn list-btn" title="قائمة الكلمات">📋</button>
+<!-- ========== الصفحة الرئيسية ========== -->
+<div class="page active" id="homePage">
+  <div class="header">
+    <h1>📚 بطاقات المفردات</h1>
+    <p class="subtitle">احفظ الكلمات بذكاء مع التكرار المتباعد</p>
+  </div>
 
-<!-- نافذة عني -->
-<div id="aboutModal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal" id="closeAboutModal">&times;</span>
-        <h2>👋 عن المبرمج</h2>
-        <div class="about-body">
-            <img src="https://github.com/rustinasser-beep.png" alt="Rusti Nasser" class="avatar">
-            <h3>Rusti Nasser</h3>
-            <p>Computer Science Student | Web Developer</p>
-            <p>Focused on clean code and real projects.</p>
-            <div class="links">
-                <a href="https://github.com/rustinasser-beep" target="_blank" class="social-link">🐙 GitHub</a>
-                <a href="https://rustinasser-beep.github.io/To_Do_List/" target="_blank" class="social-link">🚀 To-Do List Project</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- نافذة قائمة الكلمات -->
-<div id="listModal" class="modal">
-    <div class="modal-content list-modal-content">
-        <span class="close-modal" id="closeListModal">&times;</span>
-        <h2>📋 قائمة الكلمات</h2>
-        <div class="word-list" id="wordList"></div>
-    </div>
-</div>
-
-<div class="container">
-    <h1>📖 بطاقات المفردات</h1>
-    <div class="subtitle">ارفع ملفاً – بطاقات، كتابة، أو اختيارات مع مراجعة دورية</div>
-
-    <!-- رفع الملف -->
+  <!-- منطقة الرفع -->
+  <div class="card upload-card">
     <div class="upload-area" id="uploadArea">
-        <div class="upload-icon">📤</div>
-        <div class="upload-text">اختر ملف .txt أو .csv</div>
-        <div class="upload-hint">كل سطر: كلمة إنجليزية, ترجمتها العربية</div>
-        <input type="file" id="fileInput" accept=".txt,.csv,.text">
+      <div class="upload-icon">📤</div>
+      <div class="upload-text">اضغط لاختيار ملف .txt أو .csv</div>
+      <div class="upload-hint">كل سطر: كلمة إنجليزية, ترجمتها العربية</div>
+      <input type="file" id="fileInput" accept=".txt,.csv,.text">
     </div>
+  </div>
 
-    <!-- اتجاه الحفظ -->
-    <div class="direction-toggle">
-        <span>اتجاه الحفظ:</span>
-        <button id="enToArBtn" class="active">🇬🇧 → 🇸🇦</button>
-        <button id="arToEnBtn">🇸🇦 → 🇬🇧</button>
+  <!-- الإحصائيات -->
+  <div class="stats-card">
+    <div class="stat-item">
+      <div class="stat-value" id="totalWords">0</div>
+      <div class="stat-label">إجمالي الكلمات</div>
     </div>
-
-    <!-- إحصائيات -->
-    <div class="stats" id="statsBar">
-        <span>📚 الكل: <span id="totalWords">0</span></span>
-        <span class="learned">✅ محفوظة: <span id="learnedCount">0</span></span>
-        <span class="difficult">🔴 صعبة: <span id="difficultCount">0</span></span>
-        <span class="remaining">📝 متبقية: <span id="remainingCount">0</span></span>
-        <span class="mastery">📊 إتقان: <span id="masteryPercent">0%</span></span>
+    <div class="stat-item learned">
+      <div class="stat-value" id="learnedCount">0</div>
+      <div class="stat-label">محفوظة ✅</div>
     </div>
-
-    <!-- تبديل الأوضاع -->
-    <div class="mode-toggle">
-        <button id="cardModeBtn" class="active">🃏 بطاقات</button>
-        <button id="testModeBtn">✍️ اختبار</button>
+    <div class="stat-item difficult">
+      <div class="stat-value" id="difficultCount">0</div>
+      <div class="stat-label">صعبة 🔴</div>
     </div>
-
-    <!-- المحتوى الرئيسي -->
-    <div class="card-wrapper" id="cardWrapper">
-        <!-- وضع البطاقات -->
-        <div class="flashcard" id="flashcard">
-            <div class="card-face" id="cardFront">✨ انتظر رفع الملف</div>
-            <div class="card-back" id="cardBack">ستظهر الترجمة هنا</div>
-            <div class="word-status" id="wordStatus" style="display:none;">جديدة</div>
-            <button class="pronounce-btn" id="pronounceBtn" title="نطق الكلمة" style="display:none;">🔊</button>
-        </div>
-
-        <!-- وضع الاختبار -->
-        <div class="test-area" id="testArea" style="display:none;">
-            <div class="test-type-toggle">
-                <button id="typeWritingBtn" class="active">✍️ كتابة</button>
-                <button id="typeChoiceBtn">🔘 اختيارات</button>
-            </div>
-            <div class="flashcard" id="testFlashcard" style="cursor:default; height:200px;">
-                <div class="card-face" id="testCardFront" style="font-size:2rem;">?</div>
-                <div class="word-status" id="testWordStatus" style="display:none;">جديدة</div>
-                <button class="pronounce-btn" id="testPronounceBtn" title="نطق الكلمة" style="display:none;">🔊</button>
-            </div>
-            <input type="text" id="guessInput" placeholder="اكتب الترجمة..." autocomplete="off">
-            <div class="options-grid" id="optionsGrid" style="display:none;"></div>
-            <div class="test-feedback" id="testFeedback"></div>
-            <div class="test-buttons">
-                <button id="checkBtn" class="primary">✅ تحقق</button>
-                <button id="hintBtn" class="hint">💡 تلميح</button>
-                <button id="skipBtn">⏭ تجاوز</button>
-                <button id="markDifficultBtn" class="warning">🔴 صعبة</button>
-            </div>
-        </div>
+    <div class="stat-item remaining">
+      <div class="stat-value" id="remainingCount">0</div>
+      <div class="stat-label">متبقية 📝</div>
     </div>
+  </div>
 
-    <!-- أزرار التنقل -->
-    <div class="controls" id="navigationControls">
-        <button id="prevBtn"><span>◀</span> السابق</button>
-        <button id="flipBtn" class="primary">🔄 اقلب</button>
-        <button id="nextBtn">التالي <span>▶</span></button>
-    </div>
+  <!-- نسبة الإتقان -->
+  <div class="mastery-bar">
+    <div class="mastery-fill" id="masteryFill"></div>
+  </div>
+  <p class="mastery-text">نسبة الإتقان: <span id="masteryPercent">0%</span></p>
 
-    <!-- إجراءات إضافية -->
-    <div class="footer-actions">
-        <button id="shuffleBtn">🔀 خلط</button>
-        <button id="focusDifficultBtn">🎯 ركز على الصعبة</button>
-        <button id="dueReviewBtn">📅 مراجعة المستحق</button>
-        <button id="resetProgressBtn">🔄 إعادة التقدم</button>
-        <button id="resetBtn">🗑 مسح الكل</button>
-    </div>
+  <!-- أزرار الوصول السريع -->
+  <div class="quick-actions">
+    <button class="quick-btn" onclick="navigateTo('studyPage')">
+      <span class="quick-icon">🃏</span>
+      <span>دراسة</span>
+    </button>
+    <button class="quick-btn" onclick="navigateTo('testPage')">
+      <span class="quick-icon">✍️</span>
+      <span>اختبار</span>
+    </button>
+    <button class="quick-btn" onclick="navigateTo('wordsPage')">
+      <span class="quick-icon">📋</span>
+      <span>قائمة</span>
+    </button>
+  </div>
 </div>
+
+<!-- ========== صفحة الدراسة ========== -->
+<div class="page" id="studyPage">
+  <div class="header">
+    <h2>🃏 وضع البطاقات</h2>
+    <p class="subtitle">اضغط البطاقة للقلب</p>
+  </div>
+
+  <div class="card-wrapper">
+    <div class="flashcard" id="flashcard">
+      <div class="card-face" id="cardFront">📂 ارفع ملفاً أولاً</div>
+      <div class="card-back" id="cardBack">الترجمة</div>
+      <div class="word-status" id="wordStatus">جديدة</div>
+      <button class="pronounce-btn" id="pronounceBtn" title="نطق">🔊</button>
+    </div>
+  </div>
+
+  <!-- مجموعة أزرار التنقل -->
+  <div class="control-group">
+    <button class="ctrl-btn" id="prevBtn">◀ السابق</button>
+    <button class="ctrl-btn primary" id="flipBtn">🔄 اقلب</button>
+    <button class="ctrl-btn" id="nextBtn">التالي ▶</button>
+  </div>
+
+  <!-- مجموعة أزرار إضافية -->
+  <div class="control-group">
+    <button class="ctrl-btn" id="shuffleBtn">🔀 خلط</button>
+    <button class="ctrl-btn" id="focusDifficultBtn">🎯 صعبة</button>
+    <button class="ctrl-btn" id="dueReviewBtn">📅 مستحق</button>
+  </div>
+</div>
+
+<!-- ========== صفحة الاختبار ========== -->
+<div class="page" id="testPage">
+  <div class="header">
+    <h2>✍️ وضع الاختبار</h2>
+    <p class="subtitle">اختر نوع الاختبار</p>
+  </div>
+
+  <div class="mode-toggle">
+    <button id="typeWritingBtn" class="active">✍️ كتابة</button>
+    <button id="typeChoiceBtn">🔘 اختيارات</button>
+  </div>
+
+  <div class="card-wrapper">
+    <div class="flashcard test-flashcard" id="testFlashcard">
+      <div class="card-face" id="testCardFront">?</div>
+      <div class="word-status" id="testWordStatus">جديدة</div>
+      <button class="pronounce-btn" id="testPronounceBtn" title="نطق">🔊</button>
+    </div>
+  </div>
+
+  <input type="text" id="guessInput" placeholder="اكتب الإجابة..." autocomplete="off">
+  <div class="options-grid" id="optionsGrid" style="display:none;"></div>
+  <div class="test-feedback" id="testFeedback"></div>
+
+  <!-- مجموعة أزرار الاختبار -->
+  <div class="control-group">
+    <button class="ctrl-btn primary" id="checkBtn">✅ تحقق</button>
+    <button class="ctrl-btn" id="hintBtn">💡 تلميح</button>
+    <button class="ctrl-btn" id="skipBtn">⏭ تجاوز</button>
+    <button class="ctrl-btn" id="markDifficultBtn">🔴 صعبة</button>
+  </div>
+</div>
+
+<!-- ========== صفحة الكلمات ========== -->
+<div class="page" id="wordsPage">
+  <div class="header">
+    <h2>📋 قائمة الكلمات</h2>
+    <p class="subtitle">أضف كلمة جديدة أو احذفها أو غيّر حالتها</p>
+  </div>
+
+  <!-- نموذج إضافة كلمة -->
+  <div class="add-word-form">
+    <input type="text" id="newEnglish" placeholder="الكلمة الإنجليزية">
+    <input type="text" id="newArabic" placeholder="الترجمة العربية">
+    <button class="ctrl-btn primary" id="addWordBtn">➕ إضافة</button>
+  </div>
+
+  <!-- بحث -->
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="ابحث عن كلمة..." autocomplete="off">
+  </div>
+
+  <div class="word-list" id="wordList"></div>
+
+  <div class="control-group">
+    <button class="ctrl-btn" id="downloadWordsBtn">⬇️ تنزيل الكلمات</button>
+    <button class="ctrl-btn" id="resetProgressBtn">🔄 إعادة التقدم</button>
+    <button class="ctrl-btn" id="resetBtn">🗑 مسح الكل</button>
+  </div>
+</div>
+
+<!-- ========== صفحة الإعدادات ========== -->
+<div class="page" id="settingsPage">
+  <div class="header">
+    <h2>⚙️ الإعدادات</h2>
+  </div>
+
+  <div class="settings-group">
+    <label class="settings-label">اتجاه الحفظ</label>
+    <div class="direction-toggle">
+      <button id="enToArBtn" class="active">🇬🇧 → 🇸🇦</button>
+      <button id="arToEnBtn">🇸🇦 → 🇬🇧</button>
+    </div>
+  </div>
+
+  <div class="settings-group">
+    <label class="settings-label">المظهر</label>
+    <div class="direction-toggle">
+      <button id="darkToggleBtn">🌙 الوضع الداكن</button>
+    </div>
+  </div>
+
+  <div class="settings-group">
+    <label class="settings-label">دليل الاستخدام</label>
+    <button class="ctrl-btn" id="helpSettingsBtn">❓ فتح الدليل</button>
+  </div>
+
+  <div class="settings-group">
+    <label class="settings-label">عن المبرمج</label>
+    <div class="about-mini">
+      <img src="https://avatars.githubusercontent.com/u/248045749?s=400&u=34d03b9693ad4ed9272fa36ba58edbbe5e187d14&v=4" alt="Omar Nasser" class="avatar-small">
+      <div>
+        <strong>Omar Nasser</strong>
+        <p>CS Student | Web Developer</p>
+        <div class="project-links">
+          <a href="https://github.com/rustinasser-beep" target="_blank">🐙 GitHub</a>
+          <a href="https://rustinasser-beep.github.io/To_Do_List/" target="_blank">📝 To-Do List</a>
+          <a href="https://rustinasser-beep.github.io/Age-Calculation/" target="_blank">🧮 Calculator age</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== نافذة دليل الاستخدام ========== -->
+<div id="helpModal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal" id="closeHelpModal">&times;</span>
+    <h2>❓ دليل الاستخدام</h2>
+    <div class="help-body">
+      <p><strong>1. رفع الكلمات:</strong> من الصفحة الرئيسية اضغط منطقة الرفع واختر ملفًا نصيًا. كل سطر يجب أن يحتوي على كلمة وترجمتها مفصولة بفاصلة أو شرطة.</p>
+      <p><strong>2. الدراسة:</strong> استخدم البطاقات للقلب والتنقل. زر 🔊 ينطق الكلمة الإنجليزية.</p>
+      <p><strong>3. الاختبار:</strong> اختر بين كتابة أو اختيارات. صحح إجاباتك وتتبع تقدمك.</p>
+      <p><strong>4. إدارة الكلمات:</strong> في صفحة الكلمات يمكنك إضافة كلمة جديدة، حذفها، أو تغيير حالتها بالضغط على الحالة.</p>
+      <p><strong>5. المراجعة الدورية:</strong> زر "📅 مستحق" يعرض الكلمات التي حان وقت مراجعتها وفق نظام التكرار المتباعد.</p>
+      <p><strong>6. الإعدادات:</strong> غيّر اتجاه الحفظ (إنجليزي↔عربي) وفعّل الوضع الداكن.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ========== نافذة التحديثات ========== -->
+<div id="updateModal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal" id="closeUpdateModal">&times;</span>
+    <h2>🔄 تحديث الإصدار 1.2</h2>
+    <div class="update-body">
+      <p>الجديد في هذا الإصدار:</p>
+      <ul>
+        <li>✅ إضافة بحث في قائمة الكلمات</li>
+        <li>✅ زر تنزيل الكلمات كملف نصي</li>
+        <li>✅ إمكانية إضافة وحذف كلمات يدويًا</li>
+        <li>✅ تحسين تجربة الهاتف والأداء</li>
+        <li>✅ دليل استخدام متكامل في الإعدادات</li>
+      </ul>
+      <p>اضغط "✕" للمتابعة.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ========== شريط التنقل السفلي ========== -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" data-page="homePage" onclick="navigateTo('homePage')">
+    <span class="nav-icon">🏠</span>
+    <span class="nav-label">الرئيسية</span>
+  </button>
+  <button class="nav-btn" data-page="studyPage" onclick="navigateTo('studyPage')">
+    <span class="nav-icon">🃏</span>
+    <span class="nav-label">دراسة</span>
+  </button>
+  <button class="nav-btn" data-page="testPage" onclick="navigateTo('testPage')">
+    <span class="nav-icon">✍️</span>
+    <span class="nav-label">اختبار</span>
+  </button>
+  <button class="nav-btn" data-page="wordsPage" onclick="navigateTo('wordsPage')">
+    <span class="nav-icon">📋</span>
+    <span class="nav-label">الكلمات</span>
+  </button>
+  <button class="nav-btn" data-page="settingsPage" onclick="navigateTo('settingsPage')">
+    <span class="nav-icon">⚙️</span>
+    <span class="nav-label">إعدادات</span>
+  </button>
+</nav>
+
+<div class="version-badge">v1.2</div>
 
 <script src="script.js"></script>
 </body>
