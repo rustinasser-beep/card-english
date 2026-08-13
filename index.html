@@ -1,4 +1,3 @@
-<!-- ========== index.html ========== -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -12,6 +11,7 @@
 <!-- أزرار عائمة -->
 <button id="darkToggle" class="floating-btn dark-btn" title="الوضع الداكن">🌙</button>
 <button id="aboutBtn" class="floating-btn about-btn" title="عن المبرمج">👤</button>
+
 <!-- نافذة عني -->
 <div id="aboutModal" class="modal">
   <div class="modal-content">
@@ -42,12 +42,20 @@
     <input type="file" id="fileInput" accept=".txt,.csv,.text">
   </div>
 
+  <!-- اتجاه البطاقات والاختبار -->
+  <div class="direction-toggle">
+    <span>اتجاه الحفظ:</span>
+    <button id="enToArBtn" class="active">🇬🇧 → 🇸🇦</button>
+    <button id="arToEnBtn">🇸🇦 → 🇬🇧</button>
+  </div>
+
   <!-- إحصائيات -->
   <div class="stats" id="statsBar">
     <span>📚 الكل: <span id="totalWords">0</span></span>
     <span class="learned">✅ محفوظة: <span id="learnedCount">0</span></span>
     <span class="difficult">🔴 صعبة: <span id="difficultCount">0</span></span>
     <span class="remaining">📝 متبقية: <span id="remainingCount">0</span></span>
+    <span class="mastery">📊 إتقان: <span id="masteryPercent">0%</span></span>
   </div>
 
   <!-- تبديل الأوضاع -->
@@ -63,6 +71,7 @@
       <div class="card-face" id="cardFront">✨ انتظر رفع الملف</div>
       <div class="card-back" id="cardBack">ستظهر الترجمة هنا</div>
       <div class="word-status" id="wordStatus" style="display:none;">جديدة</div>
+      <button class="pronounce-btn" id="pronounceBtn" title="نطق الكلمة" style="display:none;">🔊</button>
     </div>
 
     <!-- وضع الاختبار -->
@@ -74,12 +83,14 @@
       <div class="flashcard" id="testFlashcard" style="cursor:default; height:200px;">
         <div class="card-face" id="testCardFront" style="font-size:2rem;">?</div>
         <div class="word-status" id="testWordStatus" style="display:none;">جديدة</div>
+        <button class="pronounce-btn" id="testPronounceBtn" title="نطق الكلمة" style="display:none;">🔊</button>
       </div>
-      <input type="text" id="guessInput" placeholder="اكتب الترجمة العربية..." autocomplete="off">
+      <input type="text" id="guessInput" placeholder="اكتب الترجمة..." autocomplete="off">
       <div class="options-grid" id="optionsGrid" style="display:none;"></div>
       <div class="test-feedback" id="testFeedback"></div>
       <div class="test-buttons">
         <button id="checkBtn" class="primary">✅ تحقق</button>
+        <button id="hintBtn" class="hint">💡 تلميح</button>
         <button id="skipBtn">⏭ تجاوز</button>
         <button id="markDifficultBtn" class="warning">🔴 صعبة</button>
       </div>
