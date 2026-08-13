@@ -1,4 +1,3 @@
-/* ========== script.js ========== */
 (function() {
   // الحالة
   let vocabulary = [];
@@ -8,6 +7,7 @@
   let testSubMode = 'writing';     // 'writing' | 'choice'
   let currentFilter = 'all';       // 'all' | 'due'
   let filteredVocab = [];
+  let direction = 'en-ar';        // 'en-ar' أو 'ar-en'
 
   // عناصر DOM
   const aboutBtn = document.getElementById('aboutBtn');
@@ -19,19 +19,23 @@
   const cardFront = document.getElementById('cardFront');
   const cardBack = document.getElementById('cardBack');
   const wordStatus = document.getElementById('wordStatus');
+  const pronounceBtn = document.getElementById('pronounceBtn');
 
   const testArea = document.getElementById('testArea');
   const testFlashcard = document.getElementById('testFlashcard');
   const testCardFront = document.getElementById('testCardFront');
   const testWordStatus = document.getElementById('testWordStatus');
+  const testPronounceBtn = document.getElementById('testPronounceBtn');
   const guessInput = document.getElementById('guessInput');
   const optionsGrid = document.getElementById('optionsGrid');
   const testFeedback = document.getElementById('testFeedback');
+  const hintBtn = document.getElementById('hintBtn');
 
   const totalWordsSpan = document.getElementById('totalWords');
   const learnedCountSpan = document.getElementById('learnedCount');
   const difficultCountSpan = document.getElementById('difficultCount');
   const remainingCountSpan = document.getElementById('remainingCount');
+  const masteryPercentSpan = document.getElementById('masteryPercent');
 
   const cardModeBtn = document.getElementById('cardModeBtn');
   const testModeBtn = document.getElementById('testModeBtn');
@@ -48,6 +52,8 @@
   const dueReviewBtn = document.getElementById('dueReviewBtn');
   const resetProgressBtn = document.getElementById('resetProgressBtn');
   const resetBtn = document.getElementById('resetBtn');
+  const enToArBtn = document.getElementById('enToArBtn');
+  const arToEnBtn = document.getElementById('arToEnBtn');
 
   // مودال عني
   aboutBtn.addEventListener('click', () => aboutModal.style.display = 'flex');
@@ -61,11 +67,27 @@
     saveState();
   });
 
+  // اتجاه الحفظ
+  enToArBtn.addEventListener('click', () => setDirection('en-ar'));
+  arToEnBtn.addEventListener('click', () => setDirection('ar-en'));
+
+  function setDirection(dir) {
+    direction = dir;
+    enToArBtn.classList.toggle('active', dir === 'en-ar');
+    arToEnBtn.classList.toggle('active', dir === 'ar-en');
+    if (isFlipped) {
+      flashcard.classList.remove('flipped');
+      isFlipped = false;
+    }
+    updateCardDisplay();
+    saveState();
+  }
+
   // تخزين واسترجاع
   function saveState() {
     const state = {
       vocabulary, currentIndex, currentMode, testSubMode, currentFilter,
-      dark: document.body.classList.contains('dark')
+      direction, dark: document.body.classList.contains('dark')
     };
     localStorage.setItem('flashcards_v2', JSON.stringify(state));
   }
@@ -80,14 +102,25 @@
       currentMode = state.currentMode || 'cards';
       testSubMode = state.testSubMode || 'writing';
       currentFilter = state.currentFilter || 'all';
+      direction = state.direction || 'en-ar';
       if (state.dark) {
         document.body.classList.add('dark');
         darkToggle.textContent = '☀️';
       }
+      enToArBtn.classList.toggle('active', direction === 'en-ar');
+      arToEnBtn.classList.toggle('active', direction === 'ar-en');
       applyFilter();
       updateUIForMode();
       updateCardDisplay();
     } catch(e) { console.warn('بيانات قديمة'); }
+  }
+
+  // دوال مساعدة للاتجاه
+  function getSourceWord(word) {
+    return direction === 'en-ar' ? word.english : word.arabic;
+  }
+  function getTargetWord(word) {
+    return direction === 'en-ar' ? word.arabic : word.english;
   }
 
   // الفلترة
@@ -118,6 +151,8 @@
     learnedCountSpan.textContent = counts.learned;
     difficultCountSpan.textContent = counts.difficult;
     remainingCountSpan.textContent = counts.remaining;
+    const mastery = counts.total ? Math.round((counts.learned / counts.total) * 100) : 0;
+    masteryPercentSpan.textContent = mastery + '%';
   }
 
   function updateCardDisplay() {
@@ -126,21 +161,39 @@
       cardFront.textContent = '📂 ارفع ملفاً للبدء';
       cardBack.textContent = 'الترجمة';
       wordStatus.style.display = 'none';
+      pronounceBtn.style.display = 'none';
       flashcard.classList.remove('flipped');
       testCardFront.textContent = '?';
       testWordStatus.style.display = 'none';
+      testPronounceBtn.style.display = 'none';
       optionsGrid.innerHTML = '';
       updateStats();
       return;
     }
-    cardFront.textContent = word.english;
-    cardBack.textContent = word.arabic;
+    const source = getSourceWord(word);
+    const target = getTargetWord(word);
+
+    cardFront.textContent = source;
+    cardBack.textContent = target;
     wordStatus.textContent = getStatusLabel(word.status);
     wordStatus.style.display = 'block';
 
-    testCardFront.textContent = word.english;
+    // ✅ زر النطق يظهر دائمًا إذا كانت الكلمة تحتوي على جزء إنجليزي
+    if (word.english && word.english !== '?') {
+      pronounceBtn.style.display = 'flex';
+    } else {
+      pronounceBtn.style.display = 'none';
+    }
+
+    testCardFront.textContent = source;
     testWordStatus.textContent = getStatusLabel(word.status);
     testWordStatus.style.display = 'block';
+    // ✅ زر النطق في الاختبار يظهر دائمًا
+    if (word.english && word.english !== '?') {
+      testPronounceBtn.style.display = 'flex';
+    } else {
+      testPronounceBtn.style.display = 'none';
+    }
 
     if (currentMode === 'test' && testSubMode === 'choice') generateOptions(word);
     updateStats();
@@ -154,15 +207,19 @@
 
   // خيارات متعددة
   function generateOptions(correctWord) {
-    const wrong = vocabulary.filter(w => w.arabic !== correctWord.arabic)
-                           .sort(() => 0.5 - Math.random()).slice(0, 3).map(w => w.arabic);
-    const all = [correctWord.arabic, ...wrong].sort(() => 0.5 - Math.random());
+    const target = getTargetWord(correctWord);
+    const wrong = vocabulary
+      .filter(w => getTargetWord(w) !== target)
+      .sort(() => 0.5 - Math.random())
+      .slice(0, 3)
+      .map(w => getTargetWord(w));
+    const all = [target, ...wrong].sort(() => 0.5 - Math.random());
     optionsGrid.innerHTML = '';
-    all.forEach(arabic => {
+    all.forEach(t => {
       const btn = document.createElement('div');
       btn.className = 'option-btn';
-      btn.textContent = arabic;
-      btn.addEventListener('click', () => handleChoice(arabic));
+      btn.textContent = t;
+      btn.addEventListener('click', () => handleChoice(t));
       optionsGrid.appendChild(btn);
     });
     optionsGrid.style.display = 'grid';
@@ -171,10 +228,10 @@
   function handleChoice(selected) {
     const word = getActiveWord();
     if (!word) return;
-    const correct = selected === word.arabic;
+    const correct = selected === getTargetWord(word);
     document.querySelectorAll('.option-btn').forEach(b => {
       b.style.pointerEvents = 'none';
-      if (b.textContent === word.arabic) b.classList.add('correct-choice');
+      if (b.textContent === getTargetWord(word)) b.classList.add('correct-choice');
       if (b.textContent === selected && !correct) b.classList.add('wrong-choice');
     });
     processAnswer(correct);
@@ -194,7 +251,7 @@
     word.due = Date.now() + word.interval * 3600000;
 
     updateCardDisplay();
-    testFeedback.textContent = isCorrect ? '✅ إجابة صحيحة!' : `❌ الصحيح: ${word.arabic}`;
+    testFeedback.textContent = isCorrect ? '✅ إجابة صحيحة!' : `❌ الصحيح: ${getTargetWord(word)}`;
     testFeedback.className = `test-feedback ${isCorrect ? 'correct' : 'wrong'}`;
     if (currentMode === 'test' && testSubMode === 'writing') {
       guessInput.className = isCorrect ? 'correct' : 'wrong';
@@ -207,10 +264,20 @@
     const word = getActiveWord();
     if (!word) return;
     const val = guessInput.value.trim();
-    if (!val) return (testFeedback.textContent = '⚠️ اكتب ترجمة');
-    const user = val.replace(/[؟?]/g, '');
-    const correct = word.arabic.replace(/[؟?]/g, '');
+    if (!val) return (testFeedback.textContent = '⚠️ اكتب الترجمة');
+    const user = val.replace(/[؟?]/g, '').toLowerCase();
+    const correct = getTargetWord(word).replace(/[؟?]/g, '').toLowerCase();
     processAnswer(user === correct || correct.includes(user) || user.includes(correct));
+  }
+
+  function giveHint() {
+    const word = getActiveWord();
+    if (!word) return;
+    const target = getTargetWord(word);
+    if (target.length > 0) {
+      testFeedback.textContent = `💡 أول حرف: "${target.charAt(0)}..."`;
+      testFeedback.className = 'test-feedback';
+    }
   }
 
   function resetTestUI() {
@@ -255,12 +322,14 @@
     if (testSubMode === 'writing') {
       guessInput.style.display = '';
       optionsGrid.style.display = 'none';
+      hintBtn.style.display = '';
       typeWritingBtn.classList.add('active');
       typeChoiceBtn.classList.remove('active');
       guessInput.focus();
     } else {
       guessInput.style.display = 'none';
       optionsGrid.style.display = 'grid';
+      hintBtn.style.display = 'none';
       typeWritingBtn.classList.remove('active');
       typeChoiceBtn.classList.add('active');
       if (getActiveWord()) generateOptions(getActiveWord());
@@ -340,6 +409,32 @@
   });
   flipBtn.addEventListener('click', () => flashcard.click());
 
+  // ✅ زر النطق: منع انتشار الحدث وتشغيل الصوت دائمًا للإنجليزية
+  pronounceBtn.addEventListener('click', (e) => {
+    e.stopPropagation(); // 👈 يمنع وصول الحدث إلى البطاقة
+    const word = getActiveWord();
+    if (word && word.english && word.english !== '?') {
+      speak(word.english);
+    }
+  });
+
+  testPronounceBtn.addEventListener('click', (e) => {
+    e.stopPropagation(); // 👈 يمنع أي تأثير على الاختبار
+    const word = getActiveWord();
+    if (word && word.english && word.english !== '?') {
+      speak(word.english);
+    }
+  });
+
+  function speak(text) {
+    if ('speechSynthesis' in window) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      speechSynthesis.cancel();
+      speechSynthesis.speak(utterance);
+    }
+  }
+
   // تبديل الأوضاع
   cardModeBtn.addEventListener('click', () => switchMode('cards'));
   testModeBtn.addEventListener('click', () => switchMode('test'));
@@ -351,6 +446,7 @@
   nextBtn.addEventListener('click', () => navigate(1));
 
   checkBtn.addEventListener('click', () => { if (testSubMode === 'writing') checkWriting(); });
+  hintBtn.addEventListener('click', giveHint);
   skipBtn.addEventListener('click', () => { resetTestUI(); navigate(1); });
   markDifficultBtn.addEventListener('click', () => {
     const word = getActiveWord();
@@ -379,7 +475,6 @@
 
   dueReviewBtn.addEventListener('click', () => {
     if (currentFilter === 'due') {
-      // العودة إلى الكل
       currentFilter = 'all';
       dueReviewBtn.textContent = '📅 مراجعة المستحق';
     } else {
