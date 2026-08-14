@@ -3,16 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>📚 بطاقات الكلمات – حفظ ذكي v1.2</title>
+  <title>📚 بطاقات الكلمات – حفظ ذكي v1.3</title>
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#2563eb">
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log('Service Worker Registered'));
-  }
-</script>
+  <meta name="theme-color" content="#2563eb">
 </head>
 <body>
 
@@ -23,7 +17,6 @@
     <p class="subtitle">احفظ الكلمات بذكاء مع التكرار المتباعد</p>
   </div>
 
-  <!-- منطقة الرفع -->
   <div class="card upload-card">
     <div class="upload-area" id="uploadArea">
       <div class="upload-icon">📤</div>
@@ -33,56 +26,26 @@
     </div>
   </div>
 
-  <!-- الإحصائيات -->
   <div class="stats-card">
-    <div class="stat-item">
-      <div class="stat-value" id="totalWords">0</div>
-      <div class="stat-label">إجمالي الكلمات</div>
-    </div>
-    <div class="stat-item learned">
-      <div class="stat-value" id="learnedCount">0</div>
-      <div class="stat-label">محفوظة ✅</div>
-    </div>
-    <div class="stat-item difficult">
-      <div class="stat-value" id="difficultCount">0</div>
-      <div class="stat-label">صعبة 🔴</div>
-    </div>
-    <div class="stat-item remaining">
-      <div class="stat-value" id="remainingCount">0</div>
-      <div class="stat-label">متبقية 📝</div>
-    </div>
+    <div class="stat-item"><div class="stat-value" id="totalWords">0</div><div class="stat-label">إجمالي الكلمات</div></div>
+    <div class="stat-item learned"><div class="stat-value" id="learnedCount">0</div><div class="stat-label">محفوظة ✅</div></div>
+    <div class="stat-item difficult"><div class="stat-value" id="difficultCount">0</div><div class="stat-label">صعبة 🔴</div></div>
+    <div class="stat-item remaining"><div class="stat-value" id="remainingCount">0</div><div class="stat-label">متبقية 📝</div></div>
   </div>
 
-  <!-- نسبة الإتقان -->
-  <div class="mastery-bar">
-    <div class="mastery-fill" id="masteryFill"></div>
-  </div>
+  <div class="mastery-bar"><div class="mastery-fill" id="masteryFill"></div></div>
   <p class="mastery-text">نسبة الإتقان: <span id="masteryPercent">0%</span></p>
 
-  <!-- أزرار الوصول السريع -->
   <div class="quick-actions">
-    <button class="quick-btn" onclick="navigateTo('studyPage')">
-      <span class="quick-icon">🃏</span>
-      <span>دراسة</span>
-    </button>
-    <button class="quick-btn" onclick="navigateTo('testPage')">
-      <span class="quick-icon">✍️</span>
-      <span>اختبار</span>
-    </button>
-    <button class="quick-btn" onclick="navigateTo('wordsPage')">
-      <span class="quick-icon">📋</span>
-      <span>قائمة</span>
-    </button>
+    <button class="quick-btn" onclick="navigateTo('studyPage')"><span class="quick-icon">🃏</span><span>دراسة</span></button>
+    <button class="quick-btn" onclick="navigateTo('testPage')"><span class="quick-icon">✍️</span><span>اختبار</span></button>
+    <button class="quick-btn" onclick="navigateTo('wordsPage')"><span class="quick-icon">📋</span><span>قائمة</span></button>
   </div>
 </div>
 
 <!-- ========== صفحة الدراسة ========== -->
 <div class="page" id="studyPage">
-  <div class="header">
-    <h2>🃏 وضع البطاقات</h2>
-    <p class="subtitle">اضغط البطاقة للقلب</p>
-  </div>
-
+  <div class="header"><h2>🃏 وضع البطاقات</h2><p class="subtitle">اضغط البطاقة للقلب</p></div>
   <div class="card-wrapper">
     <div class="flashcard" id="flashcard">
       <div class="card-face" id="cardFront">📂 ارفع ملفاً أولاً</div>
@@ -91,15 +54,11 @@
       <button class="pronounce-btn" id="pronounceBtn" title="نطق">🔊</button>
     </div>
   </div>
-
-  <!-- مجموعة أزرار التنقل -->
   <div class="control-group">
     <button class="ctrl-btn" id="prevBtn">◀ السابق</button>
     <button class="ctrl-btn primary" id="flipBtn">🔄 اقلب</button>
     <button class="ctrl-btn" id="nextBtn">التالي ▶</button>
   </div>
-
-  <!-- مجموعة أزرار إضافية -->
   <div class="control-group">
     <button class="ctrl-btn" id="shuffleBtn">🔀 خلط</button>
     <button class="ctrl-btn" id="focusDifficultBtn">🎯 صعبة</button>
@@ -109,16 +68,11 @@
 
 <!-- ========== صفحة الاختبار ========== -->
 <div class="page" id="testPage">
-  <div class="header">
-    <h2>✍️ وضع الاختبار</h2>
-    <p class="subtitle">اختر نوع الاختبار</p>
-  </div>
-
+  <div class="header"><h2>✍️ وضع الاختبار</h2><p class="subtitle">اختر نوع الاختبار</p></div>
   <div class="mode-toggle">
     <button id="typeWritingBtn" class="active">✍️ كتابة</button>
     <button id="typeChoiceBtn">🔘 اختيارات</button>
   </div>
-
   <div class="card-wrapper">
     <div class="flashcard test-flashcard" id="testFlashcard">
       <div class="card-face" id="testCardFront">?</div>
@@ -126,12 +80,9 @@
       <button class="pronounce-btn" id="testPronounceBtn" title="نطق">🔊</button>
     </div>
   </div>
-
   <input type="text" id="guessInput" placeholder="اكتب الإجابة..." autocomplete="off">
   <div class="options-grid" id="optionsGrid" style="display:none;"></div>
   <div class="test-feedback" id="testFeedback"></div>
-
-  <!-- مجموعة أزرار الاختبار -->
   <div class="control-group">
     <button class="ctrl-btn primary" id="checkBtn">✅ تحقق</button>
     <button class="ctrl-btn" id="hintBtn">💡 تلميح</button>
@@ -142,25 +93,14 @@
 
 <!-- ========== صفحة الكلمات ========== -->
 <div class="page" id="wordsPage">
-  <div class="header">
-    <h2>📋 قائمة الكلمات</h2>
-    <p class="subtitle">أضف كلمة جديدة أو احذفها أو غيّر حالتها</p>
-  </div>
-
-  <!-- نموذج إضافة كلمة -->
+  <div class="header"><h2>📋 قائمة الكلمات</h2><p class="subtitle">أضف كلمة جديدة أو احذفها أو غيّر حالتها</p></div>
   <div class="add-word-form">
     <input type="text" id="newEnglish" placeholder="الكلمة الإنجليزية">
     <input type="text" id="newArabic" placeholder="الترجمة العربية">
     <button class="ctrl-btn primary" id="addWordBtn">➕ إضافة</button>
   </div>
-
-  <!-- بحث -->
-  <div class="search-box">
-    <input type="text" id="searchInput" placeholder="ابحث عن كلمة..." autocomplete="off">
-  </div>
-
+  <div class="search-box"><input type="text" id="searchInput" placeholder="ابحث عن كلمة..." autocomplete="off"></div>
   <div class="word-list" id="wordList"></div>
-
   <div class="control-group">
     <button class="ctrl-btn" id="downloadWordsBtn">⬇️ تنزيل الكلمات</button>
     <button class="ctrl-btn" id="resetProgressBtn">🔄 إعادة التقدم</button>
@@ -170,9 +110,7 @@
 
 <!-- ========== صفحة الإعدادات ========== -->
 <div class="page" id="settingsPage">
-  <div class="header">
-    <h2>⚙️ الإعدادات</h2>
-  </div>
+  <div class="header"><h2>⚙️ الإعدادات</h2></div>
 
   <div class="settings-group">
     <label class="settings-label">اتجاه الحفظ</label>
@@ -184,14 +122,38 @@
 
   <div class="settings-group">
     <label class="settings-label">المظهر</label>
-    <div class="direction-toggle">
-      <button id="darkToggleBtn">🌙 الوضع الداكن</button>
-    </div>
+    <div class="direction-toggle"><button id="darkToggleBtn">🌙 الوضع الداكن</button></div>
   </div>
 
   <div class="settings-group">
     <label class="settings-label">دليل الاستخدام</label>
     <button class="ctrl-btn" id="helpSettingsBtn">❓ فتح الدليل</button>
+  </div>
+
+  <!-- نموذج الرأي داخل الإعدادات -->
+  <div class="settings-group">
+    <label class="settings-label">رأيك يهمنا</label>
+    <form id="feedbackForm" class="feedback-form">
+      <input type="text" name="name" placeholder="اسمك *" required>
+      <input type="email" name="email" placeholder="بريدك الإلكتروني *" required>
+      <textarea name="message" rows="4" placeholder="اكتب رأيك أو اقتراحك..." required></textarea>
+      <input type="hidden" name="access_key" value="c1d4a19f-7583-47ee-a733-db6276493109">
+      <input type="hidden" name="subject" value="رأي جديد من تطبيق الكلمات v1.3">
+      <button type="submit" class="ctrl-btn primary">📨 إرسال الرأي</button>
+    </form>
+    <div id="feedbackSuccess" style="display:none; text-align:center; color:green; margin-top:10px;">
+      ✅ تم إرسال رأيك بنجاح! شكراً لك.
+    </div>
+    <div id="feedbackError" style="display:none; text-align:center; color:red; margin-top:10px;">
+      ❌ حدث خطأ، تأكد من اتصالك بالإنترنت.
+    </div>
+  </div>
+
+  <!-- معلومات الإصدار وزر عرض الميزات -->
+  <div class="settings-group">
+    <label class="settings-label">معلومات الإصدار</label>
+    <p style="margin-bottom: 10px;">الإصدار الحالي: <strong>1.3</strong></p>
+    <button class="ctrl-btn" id="viewFeaturesBtn">📋 عرض ميزات هذا الإصدار</button>
   </div>
 
   <div class="settings-group">
@@ -231,15 +193,15 @@
 <div id="updateModal" class="modal">
   <div class="modal-content">
     <span class="close-modal" id="closeUpdateModal">&times;</span>
-    <h2>🔄 تحديث الإصدار 1.2</h2>
+    <h2>🔄 ميزات الإصدار 1.3</h2>
     <div class="update-body">
       <p>الجديد في هذا الإصدار:</p>
       <ul>
-        <li>✅ إضافة بحث في قائمة الكلمات</li>
-        <li>✅ زر تنزيل الكلمات كملف نصي</li>
-        <li>✅ إمكانية إضافة وحذف كلمات يدويًا</li>
-        <li>✅ تحسين تجربة الهاتف والأداء</li>
-        <li>✅ دليل استخدام متكامل في الإعدادات</li>
+        <li>✅ إضافة صفحة "رأيك يهمنا" في الإعدادات</li>
+        <li>✅ جعل الاسم والبريد إجباريين للتواصل</li>
+        <li>✅ منع تكرار الرأي من نفس الجهاز</li>
+        <li>✅ تحسين سرعة الاختبار وتقليل التأخير</li>
+        <li>✅ إصلاح مشاكل الأمان في النموذج</li>
       </ul>
       <p>اضغط "✕" للمتابعة.</p>
     </div>
@@ -248,29 +210,14 @@
 
 <!-- ========== شريط التنقل السفلي ========== -->
 <nav class="bottom-nav">
-  <button class="nav-btn active" data-page="homePage" onclick="navigateTo('homePage')">
-    <span class="nav-icon">🏠</span>
-    <span class="nav-label">الرئيسية</span>
-  </button>
-  <button class="nav-btn" data-page="studyPage" onclick="navigateTo('studyPage')">
-    <span class="nav-icon">🃏</span>
-    <span class="nav-label">دراسة</span>
-  </button>
-  <button class="nav-btn" data-page="testPage" onclick="navigateTo('testPage')">
-    <span class="nav-icon">✍️</span>
-    <span class="nav-label">اختبار</span>
-  </button>
-  <button class="nav-btn" data-page="wordsPage" onclick="navigateTo('wordsPage')">
-    <span class="nav-icon">📋</span>
-    <span class="nav-label">الكلمات</span>
-  </button>
-  <button class="nav-btn" data-page="settingsPage" onclick="navigateTo('settingsPage')">
-    <span class="nav-icon">⚙️</span>
-    <span class="nav-label">إعدادات</span>
-  </button>
+  <button class="nav-btn active" data-page="homePage" onclick="navigateTo('homePage')"><span class="nav-icon">🏠</span><span class="nav-label">الرئيسية</span></button>
+  <button class="nav-btn" data-page="studyPage" onclick="navigateTo('studyPage')"><span class="nav-icon">🃏</span><span class="nav-label">دراسة</span></button>
+  <button class="nav-btn" data-page="testPage" onclick="navigateTo('testPage')"><span class="nav-icon">✍️</span><span class="nav-label">اختبار</span></button>
+  <button class="nav-btn" data-page="wordsPage" onclick="navigateTo('wordsPage')"><span class="nav-icon">📋</span><span class="nav-label">الكلمات</span></button>
+  <button class="nav-btn" data-page="settingsPage" onclick="navigateTo('settingsPage')"><span class="nav-icon">⚙️</span><span class="nav-label">إعدادات</span></button>
 </nav>
 
-<div class="version-badge">v1.2</div>
+<div class="version-badge">v1.3</div>
 
 <script src="script.js"></script>
 </body>
