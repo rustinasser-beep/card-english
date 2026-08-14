@@ -43,7 +43,6 @@ body.dark {
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: var(--bg);
@@ -53,585 +52,110 @@ body {
     color: var(--text);
     -webkit-tap-highlight-color: transparent;
 }
-
-/* ===== الصفحات ===== */
-.page {
-    display: none;
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 20px 16px;
-    animation: fadeIn 0.3s ease;
-}
+.page { display: none; max-width: 500px; margin: 0 auto; padding: 20px 16px; animation: fadeIn 0.3s ease; }
 .page.active { display: block; }
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.header {
-    text-align: center;
-    margin-bottom: 20px;
-}
-.header h1, .header h2 {
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin-bottom: 4px;
-}
-.subtitle {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-}
-
-/* ===== بطاقات عامة ===== */
-.card {
-    background: var(--card-bg);
-    border-radius: var(--radius);
-    padding: 20px;
-    box-shadow: var(--shadow);
-    margin-bottom: 15px;
-}
-
-/* ===== منطقة الرفع ===== */
-.upload-card {
-    padding: 0;
-    overflow: hidden;
-}
-.upload-area {
-    padding: 30px 20px;
-    text-align: center;
-    cursor: pointer;
-    border: 3px dashed var(--border);
-    border-radius: var(--radius);
-    transition: all var(--transition);
-    position: relative;
-}
-.upload-area:hover {
-    border-color: var(--primary);
-    background: rgba(37, 99, 235, 0.05);
-}
-.upload-area input[type="file"] {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    opacity: 0; cursor: pointer;
-}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.header { text-align: center; margin-bottom: 20px; }
+.header h1, .header h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 4px; }
+.subtitle { color: var(--text-secondary); font-size: 0.9rem; }
+.card { background: var(--card-bg); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); margin-bottom: 15px; }
+.upload-card { padding: 0; overflow: hidden; }
+.upload-area { padding: 30px 20px; text-align: center; cursor: pointer; border: 3px dashed var(--border); border-radius: var(--radius); transition: all var(--transition); position: relative; }
+.upload-area:hover { border-color: var(--primary); background: rgba(37,99,235,0.05); }
+.upload-area input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
 .upload-icon { font-size: 2.5rem; margin-bottom: 8px; }
 .upload-text { font-weight: 600; font-size: 1.1rem; }
 .upload-hint { color: var(--text-secondary); font-size: 0.85rem; margin-top: 4px; }
-
-/* ===== الإحصائيات ===== */
-.stats-card {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    margin-bottom: 15px;
-}
-.stat-item {
-    background: var(--stat-bg);
-    border-radius: 15px;
-    padding: 12px 8px;
-    text-align: center;
-}
-.stat-value {
-    font-size: 1.5rem;
-    font-weight: 700;
-}
-.stat-label {
-    font-size: 0.7rem;
-    color: var(--text-secondary);
-    margin-top: 4px;
-}
+.stats-card { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 15px; }
+.stat-item { background: var(--stat-bg); border-radius: 15px; padding: 12px 8px; text-align: center; }
+.stat-value { font-size: 1.5rem; font-weight: 700; }
+.stat-label { font-size: 0.7rem; color: var(--text-secondary); margin-top: 4px; }
 .stat-item.learned .stat-value { color: var(--green-text); }
 .stat-item.difficult .stat-value { color: var(--red-text); }
 .stat-item.remaining .stat-value { color: var(--yellow-text); }
-
-/* ===== شريط الإتقان ===== */
-.mastery-bar {
-    width: 100%;
-    height: 8px;
-    background: var(--stat-bg);
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 5px;
-}
-.mastery-fill {
-    height: 100%;
-    background: var(--primary);
-    border-radius: 10px;
-    transition: width 0.5s ease;
-    width: 0%;
-}
-.mastery-text {
-    text-align: center;
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    margin-bottom: 15px;
-}
-
-/* ===== أزرار الوصول السريع ===== */
-.quick-actions {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-top: 15px;
-}
-.quick-btn {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 15px;
-    padding: 15px;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.2s;
-    color: var(--text);
-    font-weight: 600;
-    box-shadow: var(--shadow);
-}
-.quick-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-}
-.quick-icon {
-    font-size: 2rem;
-    display: block;
-    margin-bottom: 5px;
-}
-
-/* ===== البطاقة التعليمية ===== */
-.card-wrapper {
-    perspective: 1200px;
-    display: flex;
-    justify-content: center;
-    margin: 15px 0;
-}
-.flashcard {
-    width: 100%;
-    max-width: 400px;
-    height: 220px;
-    background: var(--card-bg);
-    border-radius: 25px;
-    box-shadow: var(--shadow);
-    cursor: pointer;
-    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-    transform-style: preserve-3d;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 25px;
-}
-.flashcard.flipped {
-    transform: rotateY(180deg);
-}
-.card-face, .card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 25px;
-    font-size: 1.8rem;
-    font-weight: 700;
-    padding: 20px;
-    word-break: break-word;
-    text-align: center;
-}
+.mastery-bar { width: 100%; height: 8px; background: var(--stat-bg); border-radius: 10px; overflow: hidden; margin-bottom: 5px; }
+.mastery-fill { height: 100%; background: var(--primary); border-radius: 10px; transition: width 0.5s ease; width: 0%; }
+.mastery-text { text-align: center; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 15px; }
+.quick-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+.quick-btn { background: var(--card-bg); border: 1px solid var(--border); border-radius: 15px; padding: 15px; cursor: pointer; text-align: center; transition: all 0.2s; color: var(--text); font-weight: 600; box-shadow: var(--shadow); }
+.quick-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0,0,0,0.15); }
+.quick-icon { font-size: 2rem; display: block; margin-bottom: 5px; }
+.card-wrapper { perspective: 1200px; display: flex; justify-content: center; margin: 15px 0; }
+.flashcard { width: 100%; max-width: 400px; height: 220px; background: var(--card-bg); border-radius: 25px; box-shadow: var(--shadow); cursor: pointer; transition: transform 0.5s cubic-bezier(0.23,1,0.32,1); transform-style: preserve-3d; position: relative; display: flex; align-items: center; justify-content: center; padding: 25px; }
+.flashcard.flipped { transform: rotateY(180deg); }
+.card-face, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; border-radius: 25px; font-size: 1.8rem; font-weight: 700; padding: 20px; word-break: break-word; text-align: center; }
 .card-face { background: var(--card-bg); color: var(--text); }
-.card-back {
-    background: #eff6ff;
-    transform: rotateY(180deg);
-    color: var(--text);
-}
+.card-back { background: #eff6ff; transform: rotateY(180deg); color: var(--text); }
 body.dark .card-back { background: #334155; }
-
-.word-status {
-    position: absolute;
-    bottom: 15px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--stat-bg);
-    padding: 4px 14px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-    z-index: 10;
-}
-.pronounce-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: var(--stat-bg);
-    border: none;
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    z-index: 10;
-    transition: background 0.2s;
-}
+.word-status { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); background: var(--stat-bg); padding: 4px 14px; border-radius: 20px; font-size: 0.75rem; color: var(--text-secondary); z-index: 10; }
+.pronounce-btn { position: absolute; top: 15px; right: 15px; background: var(--stat-bg); border: none; border-radius: 50%; width: 35px; height: 35px; font-size: 1.1rem; cursor: pointer; z-index: 10; transition: background 0.2s; }
 .pronounce-btn:hover { background: var(--border); }
-
-/* ===== مجموعات الأزرار ===== */
-.control-group {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin: 15px 0;
-}
-.ctrl-btn {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    padding: 12px 18px;
-    border-radius: 50px;
-    font-weight: 600;
-    color: var(--text);
-    cursor: pointer;
-    transition: all 0.2s;
-    font-size: 0.9rem;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    -webkit-tap-highlight-color: transparent;
-    min-width: 80px;
-}
-.ctrl-btn:hover {
-    background: var(--stat-bg);
-    transform: translateY(-2px);
-}
-.ctrl-btn.primary {
-    background: var(--primary);
-    color: white;
-    border-color: var(--primary);
-}
-.ctrl-btn.primary:hover {
-    background: var(--primary-dark);
-}
-
-/* ===== منطقة الاختبار ===== */
-.mode-toggle {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin: 15px 0;
-}
-.mode-toggle button {
-    border: none;
-    padding: 12px 25px;
-    border-radius: 50px;
-    font-weight: 600;
-    background: var(--stat-bg);
-    color: var(--text);
-    cursor: pointer;
-    transition: all 0.2s;
-}
-.mode-toggle button.active {
-    background: var(--primary);
-    color: white;
-}
-
-#guessInput {
-    width: 100%;
-    padding: 14px 20px;
-    border-radius: 50px;
-    border: 2px solid var(--border);
-    background: var(--card-bg);
-    color: var(--text);
-    font-size: 1rem;
-    text-align: center;
-    outline: none;
-    margin: 10px 0;
-    transition: border 0.2s;
-}
+.control-group { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 15px 0; }
+.ctrl-btn { background: var(--card-bg); border: 1px solid var(--border); padding: 12px 18px; border-radius: 50px; font-weight: 600; color: var(--text); cursor: pointer; transition: all 0.2s; font-size: 0.9rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05); -webkit-tap-highlight-color: transparent; min-width: 80px; }
+.ctrl-btn:hover { background: var(--stat-bg); transform: translateY(-2px); }
+.ctrl-btn.primary { background: var(--primary); color: white; border-color: var(--primary); }
+.ctrl-btn.primary:hover { background: var(--primary-dark); }
+.mode-toggle { display: flex; justify-content: center; gap: 8px; margin: 15px 0; }
+.mode-toggle button { border: none; padding: 12px 25px; border-radius: 50px; font-weight: 600; background: var(--stat-bg); color: var(--text); cursor: pointer; transition: all 0.2s; }
+.mode-toggle button.active { background: var(--primary); color: white; }
+#guessInput { width: 100%; padding: 14px 20px; border-radius: 50px; border: 2px solid var(--border); background: var(--card-bg); color: var(--text); font-size: 1rem; text-align: center; outline: none; margin: 10px 0; transition: border 0.2s; }
 #guessInput:focus { border-color: var(--primary); }
 #guessInput.correct { border-color: #22c55e !important; background: #f0fdf4; }
 #guessInput.wrong { border-color: #ef4444 !important; background: #fef2f2; }
-
-.options-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin: 10px 0;
-}
-.option-btn {
-    background: var(--card-bg);
-    border: 2px solid var(--border);
-    border-radius: 15px;
-    padding: 14px;
-    font-weight: 600;
-    color: var(--text);
-    cursor: pointer;
-    transition: all 0.2s;
-    text-align: center;
-}
+.options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0; }
+.option-btn { background: var(--card-bg); border: 2px solid var(--border); border-radius: 15px; padding: 14px; font-weight: 600; color: var(--text); cursor: pointer; transition: all 0.2s; text-align: center; }
 .option-btn:hover { background: var(--stat-bg); }
 .option-btn.correct-choice { background: var(--green-bg); border-color: #22c55e; }
 .option-btn.wrong-choice { background: var(--red-bg); border-color: #ef4444; }
-
-.test-feedback {
-    font-weight: 600;
-    text-align: center;
-    min-height: 24px;
-    margin: 10px 0;
-}
+.test-feedback { font-weight: 600; text-align: center; min-height: 24px; margin: 10px 0; }
 .test-feedback.correct { color: #22c55e; }
 .test-feedback.wrong { color: #ef4444; }
-
-/* ===== قائمة الكلمات ===== */
-.add-word-form {
-    display: flex;
-    gap: 8px;
-    margin: 15px 0;
-    flex-wrap: wrap;
-}
-.add-word-form input {
-    flex: 1;
-    padding: 10px 15px;
-    border-radius: 50px;
-    border: 2px solid var(--border);
-    background: var(--card-bg);
-    color: var(--text);
-    font-size: 0.9rem;
-    outline: none;
-    min-width: 120px;
-    transition: border 0.2s;
-}
+.add-word-form { display: flex; gap: 8px; margin: 15px 0; flex-wrap: wrap; }
+.add-word-form input { flex: 1; padding: 10px 15px; border-radius: 50px; border: 2px solid var(--border); background: var(--card-bg); color: var(--text); font-size: 0.9rem; outline: none; min-width: 120px; transition: border 0.2s; }
 .add-word-form input:focus { border-color: var(--primary); }
-
-/* ===== البحث ===== */
-.search-box {
-    margin: 10px 0;
-}
-.search-box input {
-    width: 100%;
-    padding: 10px 15px;
-    border-radius: 30px;
-    border: 2px solid var(--border);
-    background: var(--card-bg);
-    color: var(--text);
-    font-size: 0.9rem;
-    outline: none;
-}
-.search-box input:focus {
-    border-color: var(--primary);
-}
-
-.word-list {
-    margin: 15px 0;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    max-height: 50vh;
-    overflow-y: auto;
-}
-.word-item {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 15px;
-    padding: 12px 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
-.word-pair {
-    flex: 1;
-    font-size: 0.95rem;
-}
+.search-box { margin: 10px 0; }
+.search-box input { width: 100%; padding: 10px 15px; border-radius: 30px; border: 2px solid var(--border); background: var(--card-bg); color: var(--text); font-size: 0.9rem; outline: none; }
+.search-box input:focus { border-color: var(--primary); }
+.word-list { margin: 15px 0; display: flex; flex-direction: column; gap: 8px; max-height: 50vh; overflow-y: auto; }
+.word-item { background: var(--card-bg); border: 1px solid var(--border); border-radius: 15px; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; gap: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+.word-pair { flex: 1; font-size: 0.95rem; }
 .word-pair strong { font-size: 1.05rem; }
-.word-actions {
-    display: flex;
-    gap: 6px;
-}
-.status-btn,
-.delete-btn {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    cursor: pointer;
-    border: none;
-    font-weight: 600;
-    transition: filter 0.2s;
-}
+.word-actions { display: flex; gap: 6px; }
+.status-btn, .delete-btn { padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; cursor: pointer; border: none; font-weight: 600; transition: filter 0.2s; }
 .status-btn.learned { background: var(--green-bg); color: var(--green-text); }
 .status-btn.difficult { background: var(--red-bg); color: var(--red-text); }
 .status-btn.new { background: var(--yellow-bg); color: var(--yellow-text); }
 .status-btn:hover { filter: brightness(0.9); }
-.delete-btn {
-    background: #fee2e2;
-    color: #991b1b;
-}
+.delete-btn { background: #fee2e2; color: #991b1b; }
 .delete-btn:hover { filter: brightness(0.9); }
-
-/* ===== الإعدادات ===== */
-.settings-group {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 15px;
-    margin-bottom: 15px;
-    box-shadow: var(--shadow);
-}
-.settings-label {
-    font-weight: 700;
-    display: block;
-    margin-bottom: 10px;
-    font-size: 0.95rem;
-}
-.direction-toggle {
-    display: flex;
-    gap: 8px;
-}
-.direction-toggle button {
-    border: none;
-    padding: 12px 20px;
-    border-radius: 50px;
-    font-weight: 600;
-    background: var(--stat-bg);
-    color: var(--text);
-    cursor: pointer;
-    transition: all 0.2s;
-}
-.direction-toggle button.active {
-    background: var(--primary);
-    color: white;
-}
-.about-mini {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-.avatar-small {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    border: 2px solid var(--primary);
-}
-.about-mini p {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    margin: 2px 0;
-}
-.project-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 5px;
-}
-.project-links a {
-    font-size: 0.8rem;
-    color: var(--primary);
-    text-decoration: none;
-    background: var(--stat-bg);
-    padding: 4px 12px;
-    border-radius: 20px;
-    transition: background 0.2s;
-}
-.project-links a:hover {
-    background: var(--border);
-}
-
-/* ===== شريط التنقل السفلي ===== */
-.bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--nav-bg);
-    border-top: 1px solid var(--border);
-    display: flex;
-    justify-content: space-around;
-    padding: 8px 0;
-    z-index: 100;
-    box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
-    backdrop-filter: blur(10px);
-}
-.nav-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-    color: var(--text-secondary);
-    font-size: 0.7rem;
-    padding: 5px 10px;
-    border-radius: 10px;
-    transition: all 0.2s;
-    -webkit-tap-highlight-color: transparent;
-}
-.nav-btn .nav-icon {
-    font-size: 1.5rem;
-}
-.nav-btn.active {
-    color: var(--nav-active);
-    font-weight: 700;
-}
-.nav-btn:hover {
-    background: var(--stat-bg);
-}
-
-.version-badge {
-    position: fixed;
-    bottom: 70px;
-    left: 10px;
-    font-size: 0.7rem;
-    color: var(--text-secondary);
-    opacity: 0.7;
-    z-index: 99;
-}
-
-/* ===== نافذة منبثقة ===== */
-.modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.7);
-    backdrop-filter: blur(5px);
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
-.modal-content {
-    background: var(--card-bg);
-    border-radius: 25px;
-    padding: 25px;
-    max-width: 400px;
-    width: 100%;
-    text-align: right;
-    position: relative;
-    box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-    max-height: 80vh;
-    overflow-y: auto;
-}
-.close-modal {
-    position: absolute;
-    top: 15px;
-    left: 20px;
-    font-size: 2rem;
-    cursor: pointer;
-    color: var(--text-secondary);
-    background: none;
-    border: none;
-}
-.help-body p, .update-body p, .update-body li {
-    margin: 10px 0;
-    line-height: 1.6;
-    color: var(--text);
-}
-.help-body strong, .update-body strong {
-    color: var(--primary);
-}
-.update-body ul {
-    padding-right: 20px;
-}
-
-/* ===== تجاوب الموبايل ===== */
+.settings-group { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 15px; margin-bottom: 15px; box-shadow: var(--shadow); }
+.settings-label { font-weight: 700; display: block; margin-bottom: 10px; font-size: 0.95rem; }
+.direction-toggle { display: flex; gap: 8px; }
+.direction-toggle button { border: none; padding: 12px 20px; border-radius: 50px; font-weight: 600; background: var(--stat-bg); color: var(--text); cursor: pointer; transition: all 0.2s; }
+.direction-toggle button.active { background: var(--primary); color: white; }
+.about-mini { display: flex; align-items: center; gap: 12px; }
+.avatar-small { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--primary); }
+.about-mini p { font-size: 0.85rem; color: var(--text-secondary); margin: 2px 0; }
+.project-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 5px; }
+.project-links a { font-size: 0.8rem; color: var(--primary); text-decoration: none; background: var(--stat-bg); padding: 4px 12px; border-radius: 20px; transition: background 0.2s; }
+.project-links a:hover { background: var(--border); }
+.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--nav-bg); border-top: 1px solid var(--border); display: flex; justify-content: space-around; padding: 8px 0; z-index: 100; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); backdrop-filter: blur(10px); }
+.nav-btn { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; color: var(--text-secondary); font-size: 0.7rem; padding: 5px 10px; border-radius: 10px; transition: all 0.2s; -webkit-tap-highlight-color: transparent; }
+.nav-btn .nav-icon { font-size: 1.5rem; }
+.nav-btn.active { color: var(--nav-active); font-weight: 700; }
+.nav-btn:hover { background: var(--stat-bg); }
+.version-badge { position: fixed; bottom: 70px; left: 10px; font-size: 0.7rem; color: var(--text-secondary); opacity: 0.7; z-index: 99; }
+.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
+.modal-content { background: var(--card-bg); border-radius: 25px; padding: 25px; max-width: 400px; width: 100%; text-align: right; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.3); max-height: 80vh; overflow-y: auto; }
+.close-modal { position: absolute; top: 15px; left: 20px; font-size: 2rem; cursor: pointer; color: var(--text-secondary); background: none; border: none; }
+.help-body p, .update-body p, .update-body li { margin: 10px 0; line-height: 1.6; color: var(--text); }
+.help-body strong, .update-body strong { color: var(--primary); }
+.update-body ul { padding-right: 20px; }
+.feedback-form { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 20px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 12px; }
+.feedback-form input, .feedback-form textarea { width: 100%; padding: 12px 15px; border-radius: 50px; border: 2px solid var(--border); background: var(--card-bg); color: var(--text); font-size: 0.95rem; outline: none; transition: border 0.2s; }
+.feedback-form textarea { border-radius: 20px; resize: vertical; }
+.feedback-form input:focus, .feedback-form textarea:focus { border-color: var(--primary); }
+.feedback-form button { align-self: center; min-width: 150px; }
 @media (max-width: 400px) {
     .stats-card { grid-template-columns: repeat(2, 1fr); }
     .quick-actions { grid-template-columns: 1fr 1fr 1fr; }
