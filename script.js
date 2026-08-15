@@ -12,6 +12,7 @@
         currentPage: 'homePage'
     };
 
+    // ========== عناصر DOM ==========
     const elements = {};
     function cacheElements() {
         const ids = [
@@ -186,6 +187,15 @@
             elements.optionsGrid.appendChild(btn);
         });
         elements.optionsGrid.style.display = 'grid';
+    }
+
+    // ========== تقليب البطاقة ==========
+    function toggleCardFlip() {
+        if (state.currentPage !== 'studyPage') return;
+        const word = getActiveWord();
+        if (!word) return;
+        elements.flashcard.classList.toggle('flipped');
+        state.isFlipped = !state.isFlipped;
     }
 
     // ========== التصحيح ==========
@@ -384,7 +394,7 @@
     function closeUpdate() { elements.updateModal.style.display = 'none'; }
     function openFeatures() { elements.updateModal.style.display = 'flex'; }
 
-    // ========== نموذج الرأي (آمن) ==========
+    // ========== نموذج الرأي ==========
     function setCookie(name, value, days) {
         const d = new Date();
         d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
@@ -497,14 +507,11 @@
         elements.uploadArea.addEventListener('dragover', e => e.preventDefault());
         elements.uploadArea.addEventListener('drop', e => { e.preventDefault(); if (e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0]); });
 
-        elements.flashcard.addEventListener('click', () => {
-            if (getActiveWord()) {
-                elements.flashcard.classList.toggle('flipped');
-                state.isFlipped = !state.isFlipped;
-            }
-        });
-        elements.flipBtn.addEventListener('click', () => elements.flashcard.click());
+        // البطاقة والزر
+        elements.flashcard.addEventListener('click', toggleCardFlip);
+        elements.flipBtn.addEventListener('click', toggleCardFlip);
 
+        // النطق
         elements.pronounceBtn.addEventListener('click', e => {
             e.stopPropagation(); const word = getActiveWord(); if (word && word.english && word.english !== '?') speak(word.english);
         });
@@ -614,7 +621,7 @@
             if (e.target.id === 'guessInput' && e.key === 'Enter') { e.preventDefault(); checkWriting(); }
             else if (e.key === 'ArrowRight') { e.preventDefault(); navigate(1); }
             else if (e.key === 'ArrowLeft') { e.preventDefault(); navigate(-1); }
-            else if (e.key === ' ' && state.currentPage === 'studyPage') { e.preventDefault(); elements.flipBtn.click(); }
+            else if (e.key === ' ' && state.currentPage === 'studyPage') { e.preventDefault(); toggleCardFlip(); }
         });
     }
 
